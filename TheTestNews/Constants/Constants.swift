@@ -9,6 +9,8 @@ import UIKit
 
 struct Constants {
    static let mainColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
+   static let elementCornerRadius: CGFloat = 10
+   static let newsCategory = ["Science", "Sports", "Technology", "Business", "Health"]
 }
 
 

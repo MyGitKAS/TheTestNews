@@ -33,7 +33,7 @@ class Helper {
     }
     
     static func compress(image: UIImage) -> UIImage? {
-        let size = CGSize(width: 150, height: 100)
+        let size = CGSize(width: 130, height: 200)
         
         UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
         image.draw(in: CGRect(origin: .zero, size: size))

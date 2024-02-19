@@ -9,10 +9,11 @@ import UIKit
 protocol Builder {
     static func createMain() -> UIViewController
     static func createGeneralNews() -> UIViewController
+    static func createMainSource() -> UIViewController
 }
 
 class ModuleBuilder: Builder {
-    
+   
     static func createMain() -> UIViewController {
         let view = MainViewController()
         return view
@@ -20,7 +21,16 @@ class ModuleBuilder: Builder {
     
     static func createGeneralNews() -> UIViewController {
         let view = GeneralNewsViewController()
-        let presenter = GeneralNewsPresenter(view: view)
+        let networkService = NewsAPINetworkService()
+        let presenter = GeneralNewsPresenter(view: view, networkService: networkService)
+        view.presenter = presenter
+        return view
+    }
+    
+    static func createMainSource() -> UIViewController {
+        let view = MainSourceViewController()
+        let networkService = NewsAPINetworkService()
+        let presenter = MainSourceViewPresenter(view: view , networkService: networkService)
         view.presenter = presenter
         return view
     }

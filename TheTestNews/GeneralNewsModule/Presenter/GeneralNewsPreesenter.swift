@@ -7,25 +7,25 @@
 
 import Foundation
 
-protocol GeneralNewsPresenterProtocol: AnyObject {
-    var mainNews: MainNewsModel? {get}
-    func getNews()
+protocol GeneralNewsPresenterProtocol: PresenterProtocol {
+    var mainNews: MainNewsModel? { get }
     func newsItemPressed(index: Int)
-    init(view: GeneralNewsViewProtocol)
 }
 
 class GeneralNewsPresenter: GeneralNewsPresenterProtocol {
+
     var mainNews: MainNewsModel?
-    private let view: GeneralNewsViewProtocol!
+    private let view: ViewControllerProtocol!
+    private let networkService: NewsAPINetworkServiceProtocol!
     
-    required init(view: GeneralNewsViewProtocol ) {
+    required init(view: ViewControllerProtocol, networkService: NewsAPINetworkServiceProtocol) {
         self.view = view
+        self.networkService = networkService
         getNews()
     }
     
     func getNews() {
-        let networkService = NewsAPINetworkService()
-        networkService.parseNews { newsData in
+        networkService.getNews(endpoint: Endpoint.topHeadLines(country: .us)) { newsData in
             guard let news = newsData else { return }
             self.mainNews = news
             self.view.success()

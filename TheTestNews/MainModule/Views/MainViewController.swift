@@ -7,8 +7,14 @@
 
 import UIKit
 
-protocol MainViewControllerProtocol {
-    
+protocol PresenterProtocol: AnyObject {
+    func getNews()
+    init(view: ViewControllerProtocol, networkService: NewsAPINetworkServiceProtocol)
+}
+
+protocol ViewControllerProtocol {
+    func success()
+    func present(viewController: UIViewController)
 }
 
 class MainViewController: UITabBarController {
@@ -24,7 +30,7 @@ class MainViewController: UITabBarController {
         
         let firstViewController = UINavigationController(rootViewController: ModuleBuilder.createGeneralNews())
         let secondViewController = UIViewController()
-        let thirdViewController = UIViewController()
+        let thirdViewController = ModuleBuilder.createMainSource()
         let fourthViewController = UIViewController()
 
         firstViewController.tabBarItem.image = UIImage(systemName: "person.circle")
