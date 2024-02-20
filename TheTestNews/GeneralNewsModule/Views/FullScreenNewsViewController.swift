@@ -8,7 +8,7 @@
 import UIKit
 
 class FullScreenNewsViewController: UIViewController {
-   
+      
     private var scrollView: UIScrollView = {
         let scroll = UIScrollView()
         return scroll
@@ -63,8 +63,8 @@ class FullScreenNewsViewController: UIViewController {
     
     private var goSiteButton: UIButton = {
         let button = UIButton(type: .system)
-        button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
-        button.setTitle("Go to site", for: .normal)
+        button.addTarget(self, action: #selector(goSiteButtonTapped), for: .touchUpInside)
+        button.setTitle("Show news on website", for: .normal)
         button.layer.cornerRadius = Constants.elementCornerRadius
         button.backgroundColor = .white
         button.layer.borderWidth = 1.0
@@ -99,11 +99,13 @@ class FullScreenNewsViewController: UIViewController {
         
         Helper.downloadImageWith(url: article.urlToImage) { [weak self] image in
             guard let image = image else {
-                self?.imageView.image = UIImage(named:"test_full_size")
+                DispatchQueue.main.async { [weak self] in
+                    self?.imageView.image = UIImage(named:"test_full_size")
+                }
                 return
             }
             DispatchQueue.main.async { [weak self] in
-            self?.imageView.image = image
+                self?.imageView.image = image
             }
         }
         
@@ -115,8 +117,7 @@ class FullScreenNewsViewController: UIViewController {
         }
     }
     
-    @objc func buttonTapped() {
-        
+    @objc func goSiteButtonTapped(_ button: UIButton) {
     }
 }
 

@@ -87,6 +87,13 @@
 			path = Presenter;
 			sourceTree = "<group>";
 		};
+		3E71EB602B852513009D8A7F /* ViewComponents */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewComponents;
+			sourceTree = "<group>";
+		};
 		3EFB91A42B7FA11D00AF1E2B = {
 			isa = PBXGroup;
 			children = (
@@ -106,6 +113,7 @@
 		3EFB91AF2B7FA11D00AF1E2B /* TheTestNews */ = {
 			isa = PBXGroup;
 			children = (
+				3E71EB602B852513009D8A7F /* ViewComponents */,
 				3EFB91B02B7FA11D00AF1E2B /* AppDelegate.swift */,
 				3EFB91B22B7FA11D00AF1E2B /* SceneDelegate.swift */,
 				3E5219D72B82076D00CC9410 /* ArticlesSearchModule */,

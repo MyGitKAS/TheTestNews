@@ -9,6 +9,8 @@ import UIKit
 
 class ArticlesSearchCollectionViewCell: UICollectionViewCell {
     
+    var buttonTapAction: (()-> Void)?
+    
     let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: TextSize.large.getSize() , weight: .bold)
@@ -52,7 +54,7 @@ class ArticlesSearchCollectionViewCell: UICollectionViewCell {
     
     private let goSiteButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Refresh news", for: .normal)
+        button.setTitle("Show news on website", for: .normal)
         button.addTarget(self, action: #selector(goSiteButtonTapped(_:)), for: .touchUpInside)
         button.backgroundColor = .white
         button.layer.borderWidth = 1.0
@@ -86,7 +88,7 @@ class ArticlesSearchCollectionViewCell: UICollectionViewCell {
     }
     
     @objc func goSiteButtonTapped(_ button: UIButton) {
-        print("GO SITE!!!!")
+        buttonTapAction?()
     }
 }
 

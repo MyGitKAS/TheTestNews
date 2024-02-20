@@ -10,6 +10,7 @@ import UIKit
 protocol PresenterProtocol: AnyObject {
     var newsCollection: NewsModel? { get set }
     func getNews(endpoint: Endpoint)
+    func newsItemPressed(index: Int)
     init(view: ViewControllerProtocol, networkService: NewsAPINetworkServiceProtocol)
 }
 

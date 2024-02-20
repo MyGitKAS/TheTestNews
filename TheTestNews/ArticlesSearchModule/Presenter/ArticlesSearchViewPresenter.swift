@@ -5,6 +5,7 @@
 //  Created by Aleksey Kuhlenkov on 19.02.24.
 //
 import Foundation
+import SafariServices
 
 protocol ArticlesSearchViewPresenterProtocol: PresenterProtocol {
     func getSearchNews(text: String)
@@ -12,7 +13,7 @@ protocol ArticlesSearchViewPresenterProtocol: PresenterProtocol {
 }
 
 class ArticlesSearchViewPresenter: ArticlesSearchViewPresenterProtocol {
-    
+ 
     var newsCollection: NewsModel?
     private let view: ViewControllerProtocol!
     private let networkService: NewsAPINetworkServiceProtocol!
@@ -46,4 +47,10 @@ class ArticlesSearchViewPresenter: ArticlesSearchViewPresenterProtocol {
         getNews(endpoint: endpoint)
     }
     
+    func newsItemPressed(index: Int) {
+        guard let stringUrl = newsCollection?.articles[index].url else { return }
+        guard let url = URL(string: stringUrl) else { return }
+        let safariViewController = SFSafariViewController(url: url)
+        view.present(viewController: safariViewController)
+    }
 }

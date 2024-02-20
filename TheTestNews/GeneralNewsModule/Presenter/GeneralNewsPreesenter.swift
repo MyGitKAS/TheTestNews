@@ -8,12 +8,13 @@
 import Foundation
 
 protocol GeneralNewsPresenterProtocol: PresenterProtocol {
-    func newsItemPressed(index: Int)
+    
 }
 
 class GeneralNewsPresenter: GeneralNewsPresenterProtocol {
 
     var newsCollection: NewsModel?
+
     private let view: ViewControllerProtocol!
     private let networkService: NewsAPINetworkServiceProtocol!
     private let startEndpoint = Endpoint.topHeadLines(country: .us)
@@ -34,8 +35,8 @@ class GeneralNewsPresenter: GeneralNewsPresenterProtocol {
     
     func newsItemPressed(index: Int) {
         let vc = FullScreenNewsViewController()
-        let oneNews = newsCollection?.articles[index]
-        vc.setValue(article: oneNews)
+        let article = newsCollection?.articles[index]
+        vc.setValue(article: article)
         view.present(viewController: vc)
     }
 }

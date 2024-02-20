@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 protocol ArticlesSearchViewControllerProtocol: ViewControllerProtocol {}
 
 class ArticlesSearchViewController: UIViewController {
@@ -109,7 +110,7 @@ extension ArticlesSearchViewController: ArticlesSearchViewControllerProtocol {
     }
     
     func present(viewController: UIViewController) {
-        //
+        present(viewController, animated: true, completion: nil)
     }
 }
 
@@ -138,6 +139,7 @@ extension ArticlesSearchViewController: UICollectionViewDelegate, UICollectionVi
         cell.titleLabel.text = oneNews.title
         cell.leftLabel.text = oneNews.source.name
         cell.rightLabel.text = oneNews.publishedAt
+        cell.buttonTapAction = { [weak self] in self?.presenter.newsItemPressed(index: indexPath.row)}
  
         cell.layer.shadowColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         cell.layer.shadowOffset = CGSize(width: 0, height: 0)

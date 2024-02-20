@@ -54,9 +54,10 @@ class GeneralNewsViewController: UIViewController, UINavigationControllerDelegat
         navigationItem.rightBarButtonItem = rightNavigationButton
     }
     
-    @objc func rightNavigationButtonTapped(_ sender: UIButton) {
-    //TODO: -
-    }
+
+    @objc private func rightNavigationButtonTapped(_ sender: UIBarButtonItem) {
+        // TODO: -
+      }
 }
 
 extension GeneralNewsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
