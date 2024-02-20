@@ -8,14 +8,26 @@
 import Foundation
 
 protocol NewsAPINetworkServiceProtocol {
-    func getNews(endpoint: Endpoint, completion: @escaping (MainNewsModel?) -> Void)
+    func getNews(endpoint: Endpoint, completion: @escaping (NewsModel?) -> Void)
+    func getSource(endpoint: Endpoint, completion: @escaping (SourceNewsModel?) -> Void)
 }
 
 final class NewsAPINetworkService : NewsAPINetworkServiceProtocol {
 
-    let key = "7a00d18dc6ed44ee962c34da384eea7b"
-   
-    func getNews(endpoint: Endpoint, completion: @escaping (MainNewsModel?) -> Void) {
+    //let key = "7a00d18dc6ed44ee962c34da384eea7b"
+    let key = "97b2b8348ab347aab26fbcb60bfec2cf"
+    
+    let endpoint22 = Endpoint.sources(country: "us")
+    func getNews(endpoint: Endpoint, completion: @escaping (NewsModel?) -> Void) {
+        guard let url = URL(string: "\(endpoint.baseURL)\(endpoint.path())apiKey=\(key)") else {
+            completion(nil)
+            print("Invalid URL")
+            return
+        }
+        fetch(url, completion: completion)
+    }
+    
+    func getSource(endpoint: Endpoint, completion: @escaping (SourceNewsModel?) -> Void) {
         guard let url = URL(string: "\(endpoint.baseURL)\(endpoint.path())apiKey=\(key)") else {
             completion(nil)
             print("Invalid URL")
@@ -24,14 +36,13 @@ final class NewsAPINetworkService : NewsAPINetworkServiceProtocol {
        fetch(url, completion: completion)
     }
     
-    private func fetch(_ url: URL, completion: @escaping (MainNewsModel?) -> Void) {
+    private func fetch<T: Codable>(_ url: URL, completion: @escaping (T?) -> Void) {
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error {
                 print("Error: \(error)")
                 completion(nil)
                 return
             }
-            
             guard let data = data else {
                 completion(nil)
                 print("No data received")
@@ -40,8 +51,8 @@ final class NewsAPINetworkService : NewsAPINetworkServiceProtocol {
             
             do {
                 let decoder = JSONDecoder()
-                let newsResponse = try decoder.decode(MainNewsModel.self, from: data)
-                completion(newsResponse)
+                let fetchedData = try decoder.decode(T.self, from: data)
+                completion(fetchedData)
             } catch {
                 print("Error decoding data: \(error)")
                 completion(nil)
@@ -53,8 +64,8 @@ final class NewsAPINetworkService : NewsAPINetworkServiceProtocol {
 }
 
 enum Endpoint {
-    case topHeadLines(country: CountryNews)
-    case articlesFromCategory(_ category: CategoryNews)
+    case topHeadLines(country: CountryForEndpoint)
+    case articlesFromCategory(_ category: Category)
     case search (searchFilter: String)
     case sources (country: String)
     case articlesFromSource(_ source: String)
@@ -66,7 +77,7 @@ enum Endpoint {
         case .topHeadLines(let country):
             return "top-headlines?\(country.description)"
         case .articlesFromCategory(let category):
-            return "top-headlines?category=\(category.description)&"
+            return "top-headlines?category=\(category.rawValue)&"
         case .search(let q):
             return "everything?q=\(q)&"
         case .articlesFromSource:
@@ -77,7 +88,7 @@ enum Endpoint {
     }
 }
 
-enum CountryNews {
+enum CountryForEndpoint {
     case us
     case ru
     
@@ -91,37 +102,7 @@ enum CountryNews {
     }
 }
 
-enum CategoryNews: CustomStringConvertible {
-    case non
-    case general
-    case health
-    case science
-    case sports
-    case technology
-    case business
-    case entertainment
-    
-    var description: String {
-        switch self {
-        case .non:
-            return ""
-        case .general:
-            return "general"
-        case .health:
-            return "health"
-        case .science:
-            return "science"
-        case .sports:
-            return "sports"
-        case .technology:
-            return "technology"
-        case .business:
-            return "business"
-        case .entertainment:
-            return "entertainment"
-        }
-    }
-}
+
 
 
 

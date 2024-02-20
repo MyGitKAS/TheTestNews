@@ -1,18 +1,18 @@
 //
-//  GeneralNewsPreesenter.swift
+//  MainSourceViewPresenter.swift
 //  TheTestNews
 //
-//  Created by Aleksey Kuhlenkov on 16.02.24.
+//  Created by Aleksey Kuhlenkov on 19.02.24.
 //
-
 import Foundation
 
-protocol GeneralNewsPresenterProtocol: PresenterProtocol {
-    func newsItemPressed(index: Int)
+protocol ArticlesSearchViewPresenterProtocol: PresenterProtocol {
+    func getSearchNews(text: String)
+    func getCategoryNews(category: Category)
 }
 
-class GeneralNewsPresenter: GeneralNewsPresenterProtocol {
-
+class ArticlesSearchViewPresenter: ArticlesSearchViewPresenterProtocol {
+    
     var newsCollection: NewsModel?
     private let view: ViewControllerProtocol!
     private let networkService: NewsAPINetworkServiceProtocol!
@@ -32,10 +32,18 @@ class GeneralNewsPresenter: GeneralNewsPresenterProtocol {
         }
     }
     
-    func newsItemPressed(index: Int) {
-        let vc = FullScreenNewsViewController()
-        let oneNews = newsCollection?.articles[index]
-        vc.setValue(article: oneNews)
-        view.present(viewController: vc)
+    func getSearchNews(text: String) {
+        if text == "" {
+            newsCollection = nil
+            view.success()
+        }
+        let endpoint = Endpoint.search(searchFilter: text)
+        getNews(endpoint: endpoint)
     }
+    
+    func getCategoryNews(category: Category) {
+        let endpoint = Endpoint.articlesFromCategory(category)
+        getNews(endpoint: endpoint)
+    }
+    
 }

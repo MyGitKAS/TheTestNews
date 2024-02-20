@@ -61,17 +61,19 @@ class GeneralNewsViewController: UIViewController, UINavigationControllerDelegat
 
 extension GeneralNewsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return presenter.mainNews?.articles.count ?? 0
+        return presenter.newsCollection?.articles.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! GeneralCollectionViewCell
-        guard let news = presenter.mainNews else { return cell }
+        guard let news = presenter.newsCollection else { return cell }
         let oneNews = news.articles[indexPath.row]
         let Url = oneNews.urlToImage
         Helper.downloadImageWith(url: Url) { image in
           guard let image = image else {
-              cell.imageView.image = UIImage(named: "test_image")
+              DispatchQueue.main.async {
+                  cell.imageView.image = UIImage(named: "test_image")
+              }
               return
           }
           DispatchQueue.main.async {

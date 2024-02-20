@@ -28,9 +28,9 @@ class ModuleBuilder: Builder {
     }
     
     static func createMainSource() -> UIViewController {
-        let view = MainSourceViewController()
+        let view = ArticlesSearchViewController()
         let networkService = NewsAPINetworkService()
-        let presenter = MainSourceViewPresenter(view: view , networkService: networkService)
+        let presenter = ArticlesSearchViewPresenter(view: view , networkService: networkService)
         view.presenter = presenter
         return view
     }

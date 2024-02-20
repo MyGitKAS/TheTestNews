@@ -8,7 +8,8 @@
 import UIKit
 
 protocol PresenterProtocol: AnyObject {
-    func getNews()
+    var newsCollection: NewsModel? { get set }
+    func getNews(endpoint: Endpoint)
     init(view: ViewControllerProtocol, networkService: NewsAPINetworkServiceProtocol)
 }
 
@@ -18,11 +19,12 @@ protocol ViewControllerProtocol {
 }
 
 class MainViewController: UITabBarController {
-
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupConfiguration()
     }
+    
     private func setupConfiguration() {
         
         self.tabBar.tintColor = Constants.mainColor
@@ -53,4 +55,5 @@ class MainViewController: UITabBarController {
         self.viewControllers = viewControllers
     }
 }
+
 

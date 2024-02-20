@@ -7,8 +7,8 @@
 
 import Foundation
 
-
-struct MainNewsModel: Codable {
+// MARK: - SourceNewsModel
+struct NewsModel: Codable {
     let status: String?
     let totalResults: Double?
     let articles: [Article]
@@ -27,7 +27,8 @@ struct Article: Codable {
 
 // MARK: - Source
 struct Source: Codable {
-    let id: String?
-    let name: String?
+    let id, name, description: String?
+    let url: String?
+    let category: Category?
+    let language, country: String?
 }
-
