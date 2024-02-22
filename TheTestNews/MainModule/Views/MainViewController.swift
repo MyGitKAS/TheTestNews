@@ -9,18 +9,18 @@ import UIKit
 
 protocol PresenterProtocol: AnyObject {
     var newsCollection: NewsModel? { get set }
-    func getNews(endpoint: Endpoint)
-    func newsItemPressed(index: Int)
-    init(view: ViewControllerProtocol, networkService: NewsAPINetworkServiceProtocol)
+    func getData(endpoint: Endpoint)
+    func itemIsPressed(index: Int)
+    init(view: ViewControllerProtocol, networkService: NewsAPINetworkServiceProtocol, router: RouterProtocol)
 }
 
-protocol ViewControllerProtocol {
+protocol ViewControllerProtocol: AnyObject {
     func success()
     func present(viewController: UIViewController)
 }
 
 class MainViewController: UITabBarController {
- 
+     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupConfiguration()
@@ -31,20 +31,27 @@ class MainViewController: UITabBarController {
         self.tabBar.tintColor = Constants.mainColor
         self.view.backgroundColor = UIColor.white
         
-        let firstViewController = UINavigationController(rootViewController: ModuleBuilder.createGeneralNews())
-        let secondViewController = UIViewController()
-        let thirdViewController = ModuleBuilder.createMainSource()
-        let fourthViewController = UIViewController()
+        let moduleBuilder = ModuleBuilder()
+        let firstViewController = UINavigationController()
+        let router = Router(navigationController: firstViewController, moduleBuilder: moduleBuilder)
+        router.showGeneralNews()
+        let secondViewController = UINavigationController()
+        let router2 = Router(navigationController: secondViewController, moduleBuilder: moduleBuilder)
+        router2.showSourceNews()
+        let thirdViewController = UINavigationController()
+        let router3 = Router(navigationController: thirdViewController, moduleBuilder: moduleBuilder)
+        router3.showMainSource()
+        let fourthViewController = UINavigationController()
 
-        firstViewController.tabBarItem.image = UIImage(systemName: "person.circle")
+        firstViewController.tabBarItem.image = UIImage(systemName: "checkmark.bubble")
         secondViewController.tabBarItem.image = UIImage(systemName: "globe.europe.africa")
         thirdViewController.tabBarItem.image = UIImage(systemName: "magnifyingglass.circle")
         fourthViewController.tabBarItem.image = UIImage(systemName: "gear.circle")
         
-        firstViewController.title = "ГЛАВНАЯ"
-        secondViewController.title = "ИСТОЧНИКИ"
-        thirdViewController.title = "ПОИСК"
-        fourthViewController.title = "НАСТРОЙКИ"
+        firstViewController.title = "Main"
+        secondViewController.title = "Sources"
+        thirdViewController.title = "Search"
+        fourthViewController.title = "Settings"
         
         let viewControllers = [
             firstViewController,

@@ -8,24 +8,25 @@
 import Foundation
 
 protocol GeneralNewsPresenterProtocol: PresenterProtocol {
-    
+    func reloadNews()
 }
 
 class GeneralNewsPresenter: GeneralNewsPresenterProtocol {
 
     var newsCollection: NewsModel?
-
-    private let view: ViewControllerProtocol!
+    private var router: RouterProtocol!
+    private weak var view: ViewControllerProtocol!
     private let networkService: NewsAPINetworkServiceProtocol!
     private let startEndpoint = Endpoint.topHeadLines(country: .us)
     
-    required init(view: ViewControllerProtocol, networkService: NewsAPINetworkServiceProtocol) {
+    required init(view: ViewControllerProtocol, networkService: NewsAPINetworkServiceProtocol, router: RouterProtocol) {
         self.view = view
         self.networkService = networkService
-        getNews(endpoint: startEndpoint)
+        self.router = router
+        getData(endpoint: startEndpoint)
     }
     
-    func getNews(endpoint: Endpoint) {
+    func getData(endpoint: Endpoint) {
         networkService.getNews(endpoint: endpoint) { [weak self] newsData in
             guard let news = newsData else { return }
             self?.newsCollection = news
@@ -33,10 +34,12 @@ class GeneralNewsPresenter: GeneralNewsPresenterProtocol {
         }
     }
     
-    func newsItemPressed(index: Int) {
-        let vc = FullScreenNewsViewController()
-        let article = newsCollection?.articles[index]
-        vc.setValue(article: article)
-        view.present(viewController: vc)
+    func itemIsPressed(index: Int) {
+        guard let article = newsCollection?.articles[index] else { return }
+        router?.showFullscreenNews(article: article)
+    }
+    
+    func reloadNews() {
+        getData(endpoint: startEndpoint)
     }
 }

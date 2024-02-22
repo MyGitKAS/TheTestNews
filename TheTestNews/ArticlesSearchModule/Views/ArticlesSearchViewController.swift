@@ -37,6 +37,7 @@ class ArticlesSearchViewController: UIViewController {
 
     private let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
+        searchBar.backgroundColor = .clear
         return searchBar
     }()
 
@@ -69,6 +70,7 @@ class ArticlesSearchViewController: UIViewController {
         bottomSegmentedControl.isHidden = true
         searchBar.isHidden = true
         searchBar.delegate = self
+        self.navigationItem.title = "Search your News"
     }
     
     @objc func segmentedControlValueChanged(_ sender: UISegmentedControl) {
@@ -78,7 +80,7 @@ class ArticlesSearchViewController: UIViewController {
             titleLabel.isHidden = false
             searchBar.isHidden = true
             bottomSegmentedControl.isHidden = true
-            presenter.getNews(endpoint: .topHeadLines(country: .us))
+            presenter.getData(endpoint: .topHeadLines(country: .us))
         case 1:
             titleLabel.isHidden = true
             searchBar.isHidden = false
@@ -139,8 +141,7 @@ extension ArticlesSearchViewController: UICollectionViewDelegate, UICollectionVi
         cell.titleLabel.text = oneNews.title
         cell.leftLabel.text = oneNews.source.name
         cell.rightLabel.text = oneNews.publishedAt
-        cell.buttonTapAction = { [weak self] in self?.presenter.newsItemPressed(index: indexPath.row)}
- 
+        cell.buttonTapAction = { [weak self] in self?.presenter.itemIsPressed(index: indexPath.row)}
         cell.layer.shadowColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         cell.layer.shadowOffset = CGSize(width: 0, height: 0)
         cell.layer.shadowRadius = 2.0
@@ -160,13 +161,13 @@ extension ArticlesSearchViewController {
         topSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             topSegmentedControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            topSegmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            topSegmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            topSegmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
+            topSegmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8)
         ])
 
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: topSegmentedControl.bottomAnchor, constant: 20),
+            titleLabel.topAnchor.constraint(equalTo: topSegmentedControl.bottomAnchor, constant: 10),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
@@ -174,15 +175,15 @@ extension ArticlesSearchViewController {
         bottomSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             bottomSegmentedControl.topAnchor.constraint(equalTo: topSegmentedControl.bottomAnchor, constant: 10),
-            bottomSegmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            bottomSegmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            bottomSegmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
+            bottomSegmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8)
         ])
 
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            searchBar.topAnchor.constraint(equalTo: topSegmentedControl.bottomAnchor, constant: 10),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            searchBar.topAnchor.constraint(equalTo: topSegmentedControl.bottomAnchor),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8)
         ])
 
         collectionView.translatesAutoresizingMaskIntoConstraints = false

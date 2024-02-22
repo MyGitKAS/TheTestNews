@@ -6,31 +6,56 @@
 //
 import UIKit
 
-protocol Builder {
-    static func createMain() -> UIViewController
-    static func createGeneralNews() -> UIViewController
-    static func createMainSource() -> UIViewController
+protocol BuilderProtocol {
+     static func createMain() -> UIViewController
+     func createGeneralNews(router: RouterProtocol) -> UIViewController
+     func createMainSource(router: RouterProtocol) -> UIViewController
+     func createSourceNews(router: RouterProtocol) -> UIViewController
+     func createSourceNewsArticles(router: RouterProtocol, source: String) -> UIViewController
+     func createFullScreenNewsView(router: RouterProtocol, article: Article) -> UIViewController
 }
 
-class ModuleBuilder: Builder {
-   
-    static func createMain() -> UIViewController {
-        let view = MainViewController()
-        return view
+class ModuleBuilder: BuilderProtocol {
+    
+   static func createMain() -> UIViewController {
+        MainViewController()
     }
     
-    static func createGeneralNews() -> UIViewController {
-        let view = GeneralNewsViewController()
-        let networkService = NewsAPINetworkService()
-        let presenter = GeneralNewsPresenter(view: view, networkService: networkService)
+    func createFullScreenNewsView(router: RouterProtocol, article: Article) -> UIViewController {
+        let view = FullScreenNewsViewController()
+        let presenter = FullScreenNewsViewPresenter(view: view, article: article, router: router)
         view.presenter = presenter
         return view
     }
     
-    static func createMainSource() -> UIViewController {
+    func createSourceNewsArticles(router: RouterProtocol, source: String) -> UIViewController {
+        let view = SourceNewsArticlesViewController()
+        let networkService = NewsAPINetworkService()
+        let presenter = SourceNewsArticlesListPresenter(view: view , networkService: networkService, router: router, source: source)
+        view.presenter = presenter
+        return view
+    }
+    
+    func createSourceNews(router: RouterProtocol) -> UIViewController {
+        let view = SourceNewsViewController()
+        let networkService = NewsAPINetworkService()
+        let presenter = SourceNewsViewPresenter(view: view , networkService: networkService, router: router)
+        view.presenter = presenter
+        return view
+    }
+    
+     func createGeneralNews(router: RouterProtocol) -> UIViewController {
+        let view = GeneralNewsViewController()
+        let networkService = NewsAPINetworkService()
+        let presenter = GeneralNewsPresenter(view: view, networkService: networkService, router: router)
+        view.presenter = presenter
+        return view
+    }
+    
+    func createMainSource(router: RouterProtocol) -> UIViewController {
         let view = ArticlesSearchViewController()
         let networkService = NewsAPINetworkService()
-        let presenter = ArticlesSearchViewPresenter(view: view , networkService: networkService)
+        let presenter = ArticlesSearchViewPresenter(view: view , networkService: networkService, router: router)
         view.presenter = presenter
         return view
     }

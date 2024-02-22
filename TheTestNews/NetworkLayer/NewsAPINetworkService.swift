@@ -14,8 +14,8 @@ protocol NewsAPINetworkServiceProtocol {
 
 final class NewsAPINetworkService : NewsAPINetworkServiceProtocol {
 
-    //let key = "7a00d18dc6ed44ee962c34da384eea7b"
-    let key = "97b2b8348ab347aab26fbcb60bfec2cf"
+    let key = "7a00d18dc6ed44ee962c34da384eea7b"
+    //let key = "97b2b8348ab347aab26fbcb60bfec2cf"
     
     let endpoint22 = Endpoint.sources(country: "us")
     func getNews(endpoint: Endpoint, completion: @escaping (NewsModel?) -> Void) {
@@ -58,8 +58,7 @@ final class NewsAPINetworkService : NewsAPINetworkServiceProtocol {
                 completion(nil)
             }
         }
-        
-        task.resume()
+       task.resume()
     }
 }
 
@@ -80,10 +79,10 @@ enum Endpoint {
             return "top-headlines?category=\(category.rawValue)&"
         case .search(let q):
             return "everything?q=\(q)&"
-        case .articlesFromSource:
-            return "everything"
-        case .sources:
-            return "top-headlines/sources?"
+        case .articlesFromSource(let source):
+            return "top-headlines?sources=\(source)&"
+        case .sources(let country):
+            return "top-headlines/sources?country=\(country)&"
         }
     }
 }

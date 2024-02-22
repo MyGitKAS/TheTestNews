@@ -7,8 +7,15 @@
 
 import UIKit
 
-class FullScreenNewsViewController: UIViewController {
-      
+protocol FullScreenNewsViewControllerProtocol: AnyObject {
+    func setData()
+    func present(viewController: UIViewController)
+}
+
+class FullScreenNewsViewController: UIViewController , FullScreenNewsViewControllerProtocol {
+
+    var presenter: FullScreenNewsViewPresenterProtocol!
+    
     private var scrollView: UIScrollView = {
         let scroll = UIScrollView()
         return scroll
@@ -93,31 +100,22 @@ class FullScreenNewsViewController: UIViewController {
         verticalStack.addArrangedSubview(textLabel)
         verticalStack.addArrangedSubview(goSiteButton)
     }
-
-    func setValue(article: Article?) {
-        guard let article = article else { return }
-        
-        Helper.downloadImageWith(url: article.urlToImage) { [weak self] image in
-            guard let image = image else {
-                DispatchQueue.main.async { [weak self] in
-                    self?.imageView.image = UIImage(named:"test_full_size")
-                }
-                return
-            }
-            DispatchQueue.main.async { [weak self] in
-                self?.imageView.image = image
-            }
-        }
-        
-        DispatchQueue.main.async { [weak self] in
-            self?.titleLabel.text = article.title
-            self?.sourceLabel.text = article.source.name
-            self?.textLabel.text = article.description 
-            self?.dateLabel.text = article.publishedAt
+    
+    func setData() {
+        DispatchQueue.main.async { [self] in
+        self.titleLabel.text = self.presenter.article?.title
+        self.sourceLabel.text = presenter.article?.source.name
+        self.textLabel.text = presenter.article?.description
+        self.dateLabel.text = presenter.article?.publishedAt
         }
     }
     
+    func present(viewController: UIViewController) {
+        present(viewController, animated: true, completion: nil)
+    }
+    
     @objc func goSiteButtonTapped(_ button: UIButton) {
+        presenter.goSiteButtonTapped()
     }
 }
 

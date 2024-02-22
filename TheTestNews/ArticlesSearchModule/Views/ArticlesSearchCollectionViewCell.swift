@@ -76,7 +76,7 @@ class ArticlesSearchCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupConfiguration() {
-        self.layer.cornerRadius = 10
+        self.layer.cornerRadius = Constants.elementCornerRadius
         self.backgroundColor = .white
         stackView.addArrangedSubview(titleLabel)
         horizontalStackView.addArrangedSubview(leftLabel)
@@ -89,6 +89,7 @@ class ArticlesSearchCollectionViewCell: UICollectionViewCell {
     
     @objc func goSiteButtonTapped(_ button: UIButton) {
         buttonTapAction?()
+        print("PRESSSSSSSSS")
     }
 }
 

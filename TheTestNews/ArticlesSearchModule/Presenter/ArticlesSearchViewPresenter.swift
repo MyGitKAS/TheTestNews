@@ -13,19 +13,21 @@ protocol ArticlesSearchViewPresenterProtocol: PresenterProtocol {
 }
 
 class ArticlesSearchViewPresenter: ArticlesSearchViewPresenterProtocol {
- 
+    
     var newsCollection: NewsModel?
-    private let view: ViewControllerProtocol!
+    private var router: RouterProtocol!
+    private weak var view: ViewControllerProtocol!
     private let networkService: NewsAPINetworkServiceProtocol!
     private let startEndpoint = Endpoint.topHeadLines(country: .us)
     
-    required init(view: ViewControllerProtocol, networkService: NewsAPINetworkServiceProtocol) {
+    required init(view: ViewControllerProtocol, networkService: NewsAPINetworkServiceProtocol, router: RouterProtocol) {
         self.view = view
         self.networkService = networkService
-        getNews(endpoint: startEndpoint)
+        self.router = router
+        getData(endpoint: startEndpoint)
     }
     
-    func getNews(endpoint: Endpoint) {
+    func getData(endpoint: Endpoint) {
         networkService.getNews(endpoint: endpoint) { [weak self] newsData in
             guard let news = newsData else { return }
             self?.newsCollection = news
@@ -39,15 +41,15 @@ class ArticlesSearchViewPresenter: ArticlesSearchViewPresenterProtocol {
             view.success()
         }
         let endpoint = Endpoint.search(searchFilter: text)
-        getNews(endpoint: endpoint)
+        getData(endpoint: endpoint)
     }
     
     func getCategoryNews(category: Category) {
         let endpoint = Endpoint.articlesFromCategory(category)
-        getNews(endpoint: endpoint)
+        getData(endpoint: endpoint)
     }
     
-    func newsItemPressed(index: Int) {
+    func itemIsPressed(index: Int) {
         guard let stringUrl = newsCollection?.articles[index].url else { return }
         guard let url = URL(string: stringUrl) else { return }
         let safariViewController = SFSafariViewController(url: url)
