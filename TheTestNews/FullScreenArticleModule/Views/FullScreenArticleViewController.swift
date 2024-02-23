@@ -7,14 +7,14 @@
 
 import UIKit
 
-protocol FullScreenNewsViewControllerProtocol: AnyObject {
+protocol FullScreenArticleViewControllerProtocol: AnyObject {
     func setData()
     func present(viewController: UIViewController)
 }
 
-class FullScreenNewsViewController: UIViewController , FullScreenNewsViewControllerProtocol {
+class FullScreenArticleViewController: UIViewController , FullScreenArticleViewControllerProtocol {
 
-    var presenter: FullScreenNewsViewPresenterProtocol!
+    var presenter: FullScreenArticlePresenterProtocol!
     
     private var scrollView: UIScrollView = {
         let scroll = UIScrollView()
@@ -108,6 +108,12 @@ class FullScreenNewsViewController: UIViewController , FullScreenNewsViewControl
             self.sourceLabel.text = self.presenter.article?.source.name
             self.textLabel.text = self.presenter.article?.description
             self.dateLabel.text = self.presenter.article?.publishedAt
+            self.presenter.getImage() { image in
+                guard let image = image else { return }
+                DispatchQueue.main.async {
+                   self.imageView.image = image
+                }
+            }
         }
     }
     
@@ -120,7 +126,7 @@ class FullScreenNewsViewController: UIViewController , FullScreenNewsViewControl
     }
 }
 
-extension FullScreenNewsViewController {
+extension FullScreenArticleViewController {
     private func setupConstraints() {
 
         scrollView.translatesAutoresizingMaskIntoConstraints = false

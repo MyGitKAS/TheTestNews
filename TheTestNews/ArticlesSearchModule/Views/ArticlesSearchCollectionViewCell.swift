@@ -89,7 +89,6 @@ class ArticlesSearchCollectionViewCell: UICollectionViewCell {
     
     @objc func goSiteButtonTapped(_ button: UIButton) {
         buttonTapAction?()
-        print("PRESSSSSSSSS")
     }
 }
 

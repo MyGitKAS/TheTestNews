@@ -22,8 +22,9 @@ class ModuleBuilder: BuilderProtocol {
     }
     
     func createFullScreenNewsView(router: RouterProtocol, article: Article) -> UIViewController {
-        let view = FullScreenNewsViewController()
-        let presenter = FullScreenNewsViewPresenter(view: view, article: article, router: router)
+        let view = FullScreenArticleViewController()
+        let networkService = NewsAPINetworkService()
+        let presenter = FullScreenArticleViewPresenter(view: view, article: article, router: router, networkService: networkService)
         view.presenter = presenter
         return view
     }
