@@ -62,17 +62,12 @@ extension GeneralNewsViewController: UICollectionViewDelegate, UICollectionViewD
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! GeneralCollectionViewCell
         guard let news = presenter.newsCollection else { return cell }
         let oneNews = news.articles[indexPath.row]
-        let Url = oneNews.urlToImage
-        Helper.downloadImageWith(url: Url) { image in
-          guard let image = image else {
-              DispatchQueue.main.async {
-                  cell.imageView.image = UIImage(named: "test_image")
-              }
-              return
-          }
-          DispatchQueue.main.async {
-              cell.imageView.image = image
-          }
+        
+        presenter.getImage(index: indexPath.row) { image in
+            guard let image = image else { return }
+            DispatchQueue.main.async {
+                cell.imageView.image = image
+            }
         }
         cell.titleLabel.text = oneNews.title
         cell.sourceLabel.text = oneNews.source.name

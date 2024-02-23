@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import UIKit
 
 protocol NewsAPINetworkServiceProtocol {
     func getNews(endpoint: Endpoint, completion: @escaping (NewsModel?) -> Void)
     func getSource(endpoint: Endpoint, completion: @escaping (SourceNewsModel?) -> Void)
+    func downloadImageWith(urlString: String?, completion: @escaping (UIImage?) -> Void)
 }
 
 final class NewsAPINetworkService : NewsAPINetworkServiceProtocol {
@@ -34,6 +36,35 @@ final class NewsAPINetworkService : NewsAPINetworkServiceProtocol {
             return
         }
        fetch(url, completion: completion)
+    }
+    
+    func downloadImageWith(urlString: String?, completion: @escaping (UIImage?) -> Void) {
+        guard let stringUrl = urlString else {
+            completion(nil)
+            return
+        }
+        
+        guard let url = URL(string: stringUrl) else {
+            completion(nil)
+            print("Invalid URL")
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                print("Error: \(error)")
+                completion(nil)
+                return
+            }
+            
+            guard let data = data, let image = UIImage(data: data) else {
+                completion(nil)
+                print("Unable to create image from data")
+                return
+            }
+            
+            completion(image)
+        }.resume()
     }
     
     private func fetch<T: Codable>(_ url: URL, completion: @escaping (T?) -> Void) {

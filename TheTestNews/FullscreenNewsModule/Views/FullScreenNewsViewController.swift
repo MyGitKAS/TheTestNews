@@ -102,11 +102,12 @@ class FullScreenNewsViewController: UIViewController , FullScreenNewsViewControl
     }
     
     func setData() {
-        DispatchQueue.main.async { [self] in
-        self.titleLabel.text = self.presenter.article?.title
-        self.sourceLabel.text = presenter.article?.source.name
-        self.textLabel.text = presenter.article?.description
-        self.dateLabel.text = presenter.article?.publishedAt
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.titleLabel.text = self.presenter.article?.title
+            self.sourceLabel.text = self.presenter.article?.source.name
+            self.textLabel.text = self.presenter.article?.description
+            self.dateLabel.text = self.presenter.article?.publishedAt
         }
     }
     

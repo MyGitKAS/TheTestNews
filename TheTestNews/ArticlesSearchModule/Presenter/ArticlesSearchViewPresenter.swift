@@ -6,10 +6,12 @@
 //
 import Foundation
 import SafariServices
+import UIKit
 
 protocol ArticlesSearchViewPresenterProtocol: PresenterProtocol {
     func getSearchNews(text: String)
     func getCategoryNews(category: Category)
+    func getImage(index: Int, completion: @escaping (UIImage?) -> Void)
 }
 
 class ArticlesSearchViewPresenter: ArticlesSearchViewPresenterProtocol {
@@ -54,5 +56,17 @@ class ArticlesSearchViewPresenter: ArticlesSearchViewPresenterProtocol {
         guard let url = URL(string: stringUrl) else { return }
         let safariViewController = SFSafariViewController(url: url)
         view.present(viewController: safariViewController)
+    }
+    
+    func getImage(index: Int, completion: @escaping (UIImage?) -> Void) {
+        guard let url = newsCollection?.articles[index].urlToImage else {
+            completion(UIImage(named: "test_image"))
+            return
+        }
+        networkService.downloadImageWith(urlString: url) { image in
+            guard let image = image else { return }
+           let compressImage =  Helper.compress(image: image)
+            completion(compressImage)
+        }
     }
 }

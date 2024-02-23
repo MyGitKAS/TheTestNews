@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import UIKit
 
 protocol SourceNewsArticlesListPresenterProtocol: PresenterProtocol {
     var source: String { get }
+    func getImage(index: Int, completion: @escaping (UIImage?) -> Void)
     init(view: ViewControllerProtocol, networkService: NewsAPINetworkServiceProtocol, router: RouterProtocol, source: String)
 }
 
@@ -46,6 +48,18 @@ class SourceNewsArticlesListPresenter: SourceNewsArticlesListPresenterProtocol {
             guard let news = newsData else { return }
             self?.newsCollection = news
             self?.view.success()
+        }
+    }
+    
+    func getImage(index: Int, completion: @escaping (UIImage?) -> Void) {
+        guard let url = newsCollection?.articles[index].urlToImage else {
+            completion(UIImage(named: "test_image"))
+            return
+        }
+        networkService.downloadImageWith(urlString: url) { image in
+            guard let image = image else { return }
+           let compressImage =  Helper.compress(image: image)
+            completion(compressImage)
         }
     }
     

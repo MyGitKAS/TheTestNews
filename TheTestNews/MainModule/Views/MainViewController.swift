@@ -41,9 +41,9 @@ class MainViewController: UITabBarController {
         let thirdViewController = UINavigationController()
         let router3 = Router(navigationController: thirdViewController, moduleBuilder: moduleBuilder)
         router3.showMainSource()
-        let fourthViewController = UINavigationController()
+        let fourthViewController = UIViewController()
 
-        firstViewController.tabBarItem.image = UIImage(systemName: "checkmark.bubble")
+        firstViewController.tabBarItem.image = UIImage(systemName: "checkmark.circle")
         secondViewController.tabBarItem.image = UIImage(systemName: "globe.europe.africa")
         thirdViewController.tabBarItem.image = UIImage(systemName: "magnifyingglass.circle")
         fourthViewController.tabBarItem.image = UIImage(systemName: "gear.circle")

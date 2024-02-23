@@ -56,7 +56,6 @@ class GeneralCollectionViewCell: UICollectionViewCell {
         imageView.contentMode = .scaleToFill
         imageView.layer.cornerRadius = Constants.elementCornerRadius
         imageView.layer.masksToBounds = true
-        imageView.image = UIImage(named:"test_image")
         return imageView
     }()
 

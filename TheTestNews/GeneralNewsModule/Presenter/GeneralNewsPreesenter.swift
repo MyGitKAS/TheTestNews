@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import UIKit
 
 protocol GeneralNewsPresenterProtocol: PresenterProtocol {
     func reloadNews()
+    func getImage(index: Int, completion: @escaping (UIImage?) -> Void) 
 }
 
 class GeneralNewsPresenter: GeneralNewsPresenterProtocol {
@@ -24,6 +26,18 @@ class GeneralNewsPresenter: GeneralNewsPresenterProtocol {
         self.networkService = networkService
         self.router = router
         getData(endpoint: startEndpoint)
+    }
+    
+    func getImage(index: Int, completion: @escaping (UIImage?) -> Void) {
+        guard let url = newsCollection?.articles[index].urlToImage else {
+            completion(UIImage(named: "test_image"))
+            return
+        }
+        networkService.downloadImageWith(urlString: url) { image in
+            guard let image = image else { return }
+            let compressImage =  Helper.compress(image: image)
+            completion(compressImage)
+        }
     }
     
     func getData(endpoint: Endpoint) {
