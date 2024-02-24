@@ -47,6 +47,7 @@ class FullScreenArticleViewController: UIViewController {
         let button = UIButton(type: .system)
         button.titleLabel?.font = UIFont.systemFont(ofSize: TextSize.medium.getSize(), weight: .light)
         button.addTarget(self, action: #selector(sourceButtonTapped), for: .touchUpInside)
+        button.tintColor = Constants.mainColor
         return button
     }()
     

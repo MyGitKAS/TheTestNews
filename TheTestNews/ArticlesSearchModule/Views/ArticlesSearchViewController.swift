@@ -17,12 +17,16 @@ class ArticlesSearchViewController: UIViewController {
         let segmentedControl = UISegmentedControl(items: ["Top Headlines", "Search", "Category"])
         segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
         segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.selectedSegmentTintColor = Constants.mainColor
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
         return segmentedControl
     }()
 
     private let bottomSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: Constants.categoryNews.map{$0.rawValue})
         segmentedControl.addTarget(self, action: #selector(bottomSegmentedControlValueChanged), for: .valueChanged)
+        segmentedControl.selectedSegmentTintColor = Constants.mainColor
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
         return segmentedControl
     }()
     

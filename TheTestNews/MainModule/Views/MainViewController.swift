@@ -32,15 +32,9 @@ class MainViewController: UITabBarController {
         self.view.backgroundColor = UIColor.white
         
         let moduleBuilder = ModuleBuilder()
-        let firstViewController = UINavigationController()
-        let router = Router(navigationController: firstViewController, moduleBuilder: moduleBuilder)
-        router.showGeneralNews()
-        let secondViewController = UINavigationController()
-        let router2 = Router(navigationController: secondViewController, moduleBuilder: moduleBuilder)
-        router2.showSourceNews()
-        let thirdViewController = UINavigationController()
-        let router3 = Router(navigationController: thirdViewController, moduleBuilder: moduleBuilder)
-        router3.showMainSource()
+        let firstViewController = moduleBuilder.createGeneralNewsViewController()
+        let secondViewController = moduleBuilder.createSourceNewsViewController()
+        let thirdViewController = moduleBuilder.createMainSourceViewController()
         let fourthViewController = UIViewController()
 
         firstViewController.tabBarItem.image = UIImage(systemName: "checkmark.circle")

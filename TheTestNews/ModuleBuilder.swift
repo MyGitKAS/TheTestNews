@@ -13,6 +13,10 @@ protocol BuilderProtocol {
      func createSourceNews(router: RouterProtocol) -> UIViewController
      func createSourceNewsArticles(router: RouterProtocol, source: String) -> UIViewController
      func createFullScreenNewsView(router: RouterProtocol, article: Article) -> UIViewController
+    
+    func createGeneralNewsViewController() -> UIViewController
+    func createSourceNewsViewController() -> UIViewController
+    func createMainSourceViewController() -> UIViewController
 }
 
 class ModuleBuilder: BuilderProtocol {
@@ -59,5 +63,26 @@ class ModuleBuilder: BuilderProtocol {
         let presenter = ArticlesSearchViewPresenter(view: view , networkService: networkService, router: router)
         view.presenter = presenter
         return view
+    }
+    
+    func createGeneralNewsViewController() -> UIViewController {
+            let navigationController = UINavigationController()
+            let router = Router(navigationController: navigationController, moduleBuilder: self)
+            router.showGeneralNews()
+            return navigationController
+        }
+      
+    func createSourceNewsViewController() -> UIViewController {
+        let navigationController = UINavigationController()
+        let router = Router(navigationController: navigationController, moduleBuilder: self)
+        router.showSourceNews()
+        return navigationController
+    }
+    
+    func createMainSourceViewController() -> UIViewController {
+        let navigationController = UINavigationController()
+        let router = Router(navigationController: navigationController, moduleBuilder: self)
+        router.showMainSource()
+        return navigationController
     }
 }
