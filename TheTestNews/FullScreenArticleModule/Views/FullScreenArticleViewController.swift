@@ -81,7 +81,7 @@ class FullScreenArticleViewController: UIViewController {
         button.layer.borderWidth = 1.0
         button.layer.borderColor = Constants.mainColor.cgColor
         button.setTitleColor(Constants.mainColor, for: .normal)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: TextSize.large.getSize())
         return button
     }()
     
@@ -165,6 +165,7 @@ extension FullScreenArticleViewController {
             horisontalStack.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10)
         ])
         
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.heightAnchor.constraint(equalToConstant: 250).isActive = true
     }
 }

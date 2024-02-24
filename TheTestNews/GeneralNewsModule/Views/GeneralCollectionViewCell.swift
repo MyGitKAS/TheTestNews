@@ -92,8 +92,8 @@ class GeneralCollectionViewCell: UICollectionViewCell {
 extension GeneralCollectionViewCell {
     
     private func setupConstraints() {
-        stackView.translatesAutoresizingMaskIntoConstraints = false
         
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),

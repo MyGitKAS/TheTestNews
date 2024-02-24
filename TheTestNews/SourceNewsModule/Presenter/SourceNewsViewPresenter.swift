@@ -31,18 +31,32 @@ class SourceNewsViewPresenter: SourceNewsViewPresenterProtocol{
     }
     
     func getSourceNews(endpoint: Endpoint) {
-        networkService.getSource(endpoint: endpoint) { [weak self] sourceData in
-            guard let source = sourceData else { return }
-            self?.sourceCollection = source
-            self?.view.success()
+        networkService.getSource(endpoint: endpoint) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                    case .success(let source):
+                        self?.sourceCollection = source
+                        self?.view.success()
+                    case .failure(let error):
+                        let alertController = ModuleBuilder.createErrorAlert(message: error.localizedDescription)
+                        self?.view.present(viewController: alertController)
+                }
+            }
         }
     }
     
     func getData(endpoint: Endpoint) {
-        networkService.getNews(endpoint: endpoint) { [weak self] newsData in
-            guard let news = newsData else { return }
-            self?.newsCollection = news
-            self?.view.success()
+        networkService.getNews(endpoint: endpoint) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                    case .success(let news):
+                        self?.newsCollection = news
+                        self?.view.success()
+                    case .failure(let error):
+                        let alertController = ModuleBuilder.createErrorAlert(message: error.localizedDescription)
+                        self?.view.present(viewController: alertController)
+                }
+            }
         }
     }
     

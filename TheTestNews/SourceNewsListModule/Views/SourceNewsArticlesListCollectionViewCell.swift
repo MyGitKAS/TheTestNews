@@ -7,6 +7,6 @@
 
 import UIKit
 
-class SourceNewsArticlesCollectionViewCell: GeneralCollectionViewCell {
+class SourceNewsArticlesListCollectionViewCell: GeneralCollectionViewCell {
     
 }

@@ -61,7 +61,6 @@ extension GeneralNewsViewController: UICollectionViewDelegate, UICollectionViewD
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! GeneralCollectionViewCell
         guard let news = presenter.newsCollection else { return cell }
         let article = news.articles[indexPath.row]
-        
         presenter.getImage(index: indexPath.row) { image in
             guard let image = image else { return }
             DispatchQueue.main.async {

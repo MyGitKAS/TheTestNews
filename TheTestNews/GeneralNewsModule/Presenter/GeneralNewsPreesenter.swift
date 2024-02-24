@@ -16,6 +16,7 @@ protocol GeneralNewsPresenterProtocol: PresenterProtocol {
 class GeneralNewsPresenter: GeneralNewsPresenterProtocol {
 
     var newsCollection: NewsModel?
+    
     private var router: RouterProtocol!
     private weak var view: ViewControllerProtocol!
     private let networkService: NewsAPINetworkServiceProtocol!
@@ -33,18 +34,29 @@ class GeneralNewsPresenter: GeneralNewsPresenterProtocol {
             completion(UIImage(named: "test_image"))
             return
         }
+        
         networkService.downloadImageWith(urlString: url) { image in
-            guard let image = image else { return }
-            let compressImage =  Helper.compress(image: image)
-            completion(compressImage)
+            if let image = image {
+                let compressImage = Helper.compress(image: image)
+                completion(compressImage)
+            } else {
+                completion(nil)
+            }
         }
     }
-    
+
     func getData(endpoint: Endpoint) {
-        networkService.getNews(endpoint: endpoint) { [weak self] newsData in
-            guard let news = newsData else { return }
-            self?.newsCollection = news
-            self?.view.success()
+        networkService.getNews(endpoint: endpoint) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                    case .success(let news):
+                        self?.newsCollection = news
+                        self?.view.success()
+                    case .failure(let error):
+                        let alertController = ModuleBuilder.createErrorAlert(message: error.localizedDescription)
+                        self?.view.present(viewController: alertController)
+                }
+            }
         }
     }
     

@@ -21,4 +21,3 @@ class Helper {
         return compressedImage
     }
 }
-

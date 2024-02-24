@@ -8,6 +8,7 @@ import UIKit
 
 protocol BuilderProtocol {
      static func createMain() -> UIViewController
+     static func createErrorAlert(message: String) -> UIAlertController
      func createGeneralNews(router: RouterProtocol) -> UIViewController
      func createMainSource(router: RouterProtocol) -> UIViewController
      func createSourceNews(router: RouterProtocol) -> UIViewController
@@ -85,4 +86,11 @@ class ModuleBuilder: BuilderProtocol {
         router.showMainSource()
         return navigationController
     }
+    
+    static func createErrorAlert(message: String) -> UIAlertController {
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        return alertController
+    }
 }
+

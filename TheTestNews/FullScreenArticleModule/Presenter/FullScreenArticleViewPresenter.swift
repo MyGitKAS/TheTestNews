@@ -19,8 +19,9 @@ protocol FullScreenArticlePresenterProtocol {
 class FullScreenArticleViewPresenter: FullScreenArticlePresenterProtocol {
   
     let article: Article!
+    
     private let networkService: NewsAPINetworkServiceProtocol!
-    private var router: RouterProtocol!
+    private let router: RouterProtocol!
     private weak var view: FullScreenArticleViewControllerProtocol!
   
     required init(view: FullScreenArticleViewControllerProtocol, article: Article, router: RouterProtocol, networkService: NewsAPINetworkServiceProtocol) {

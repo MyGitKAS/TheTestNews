@@ -7,9 +7,9 @@
 
 import UIKit
 
-protocol SourceNewsArticlesViewControllerProtocol: ViewControllerProtocol {}
+protocol SourceNewsArticlesListViewController: ViewControllerProtocol {}
 
-class SourceNewsArticlesViewController: UIViewController, UINavigationControllerDelegate {
+class SourceNewsArticlesViewController: UIViewController {
 
     var presenter: SourceNewsArticlesListPresenterProtocol!
     
@@ -22,20 +22,18 @@ class SourceNewsArticlesViewController: UIViewController, UINavigationController
         layout.itemSize = CGSize(width: cellWidth - 20, height: 120)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(SourceNewsArticlesCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        collectionView.register(SourceNewsArticlesListCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         return collectionView
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .blue
         setupConfiguration()
         setupConstraints()
     }
     
     private func setupConfiguration() {
         view.addSubview(collectionView)
-        navigationController?.delegate = self
         let sourceName = presenter.source
         self.navigationItem.title = "Article by \(sourceName)"
     }
@@ -47,10 +45,9 @@ extension SourceNewsArticlesViewController: UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! SourceNewsArticlesCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! SourceNewsArticlesListCollectionViewCell
         guard let news = presenter.newsCollection else { return cell }
         let article = news.articles[indexPath.row]
-        
         presenter.getImage(index: indexPath.row) { image in
             guard let image = image else { return }
             DispatchQueue.main.async {

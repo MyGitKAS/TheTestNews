@@ -22,7 +22,7 @@ class ArticlesSearchViewController: UIViewController {
         return segmentedControl
     }()
 
-    private let bottomSegmentedControl: UISegmentedControl = {
+    private lazy var bottomSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: Constants.categoryNews.map{$0.rawValue})
         segmentedControl.addTarget(self, action: #selector(bottomSegmentedControlValueChanged), for: .valueChanged)
         segmentedControl.selectedSegmentTintColor = Constants.mainColor
@@ -39,7 +39,7 @@ class ArticlesSearchViewController: UIViewController {
         return label
     }()
 
-    private let searchBar: UISearchBar = {
+    private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.backgroundColor = .clear
         return searchBar
@@ -146,6 +146,7 @@ extension ArticlesSearchViewController: UICollectionViewDelegate, UICollectionVi
         return cell
     }
 }
+
 extension ArticlesSearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         presenter.getSearchNews(text: searchText)

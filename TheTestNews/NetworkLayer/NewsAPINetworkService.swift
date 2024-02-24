@@ -9,8 +9,8 @@ import Foundation
 import UIKit
 
 protocol NewsAPINetworkServiceProtocol {
-    func getNews(endpoint: Endpoint, completion: @escaping (NewsModel?) -> Void)
-    func getSource(endpoint: Endpoint, completion: @escaping (SourceNewsModel?) -> Void)
+    func getNews(endpoint: Endpoint, completion: @escaping (Result<NewsModel?, Error>) -> Void)
+    func getSource(endpoint: Endpoint, completion: @escaping (Result<SourceNewsModel?, Error>) -> Void)
     func downloadImageWith(urlString: String?, completion: @escaping (UIImage?) -> Void)
 }
 
@@ -19,79 +19,85 @@ final class NewsAPINetworkService : NewsAPINetworkServiceProtocol {
     let key = "7a00d18dc6ed44ee962c34da384eea7b"
     //let key = "97b2b8348ab347aab26fbcb60bfec2cf"
     
-    let endpoint22 = Endpoint.sources(country: "us")
-    func getNews(endpoint: Endpoint, completion: @escaping (NewsModel?) -> Void) {
+    func getNews(endpoint: Endpoint, completion: @escaping (Result<NewsModel?, Error>) -> Void) {
         guard let url = URL(string: "\(endpoint.baseURL)\(endpoint.path())apiKey=\(key)") else {
-            completion(nil)
-            print("Invalid URL")
+            completion(.failure(NetworkError.invalidURL))
             return
         }
-        fetch(url, completion: completion)
-    }
-    
-    func getSource(endpoint: Endpoint, completion: @escaping (SourceNewsModel?) -> Void) {
-        guard let url = URL(string: "\(endpoint.baseURL)\(endpoint.path())apiKey=\(key)") else {
-            completion(nil)
-            print("Invalid URL")
-            return
+        fetch(url) { (result: Result<NewsModel, Error>) in
+            switch result {
+            case .success(let newsModel):
+                completion(.success(newsModel))
+            case .failure(let error):
+                completion(.failure(error))
+            }
         }
-       fetch(url, completion: completion)
     }
     
-    func downloadImageWith(urlString: String?, completion: @escaping (UIImage?) -> Void) {
-        guard let stringUrl = urlString else {
-            completion(nil)
+    func getSource(endpoint: Endpoint, completion: @escaping (Result<SourceNewsModel?, Error>) -> Void) {
+        guard let url = URL(string: "\(endpoint.baseURL)\(endpoint.path())apiKey=\(key)") else {
+            completion(.failure(NetworkError.invalidURL))
             return
         }
         
-        guard let url = URL(string: stringUrl) else {
+        fetch(url) { (result: Result<SourceNewsModel, Error>) in
+            switch result {
+            case .success(let sourceNewsModel):
+                completion(.success(sourceNewsModel))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func downloadImageWith(urlString: String?, completion: @escaping (UIImage?) -> Void) {
+        guard let stringUrl = urlString, let url = URL(string: stringUrl) else {
             completion(nil)
-            print("Invalid URL")
             return
         }
 
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if let error = error {
-                print("Error: \(error)")
+        URLSession.shared.dataTask(with: url) { (data, _, error) in
+            if error != nil {
                 completion(nil)
                 return
             }
             
             guard let data = data, let image = UIImage(data: data) else {
                 completion(nil)
-                print("Unable to create image from data")
                 return
             }
-            
             completion(image)
         }.resume()
     }
     
-    private func fetch<T: Codable>(_ url: URL, completion: @escaping (T?) -> Void) {
+    private func fetch<T: Codable>(_ url: URL, completion: @escaping (Result<T, Error>) -> Void) {
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error {
-                print("Error: \(error)")
-                completion(nil)
+                completion(.failure(error))
                 return
             }
             guard let data = data else {
-                completion(nil)
-                print("No data received")
+                completion(.failure(NetworkError.noDataReceived))
                 return
             }
             
             do {
                 let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .iso8601 
+                decoder.dateDecodingStrategy = .iso8601
                 let fetchedData = try decoder.decode(T.self, from: data)
-                completion(fetchedData)
+                completion(.success(fetchedData))
             } catch {
-                print("Error decoding data: \(error)")
-                completion(nil)
+                completion(.failure(error))
             }
         }
         task.resume()
     }
+}
+
+enum NetworkError: Error {
+    case invalidURL
+    case noDataReceived
+    case unableToCreateImage
 }
 
 enum Endpoint {
