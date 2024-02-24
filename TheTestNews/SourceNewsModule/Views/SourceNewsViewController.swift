@@ -7,11 +7,9 @@
 
 import UIKit
 
-protocol SourceNewsViewControllerProtocol: ViewControllerProtocol {
-    
-}
+protocol SourceNewsViewControllerProtocol: ViewControllerProtocol {}
 
-class SourceNewsViewController: UIViewController, UINavigationControllerDelegate {
+class SourceNewsViewController: UIViewController {
 
     var presenter: SourceNewsViewPresenter!
     
@@ -36,7 +34,6 @@ class SourceNewsViewController: UIViewController, UINavigationControllerDelegate
  
     private func setupConfiguration() {
         view.addSubview(collectionView)
-        navigationController?.delegate = self
         self.navigationItem.title = "Choose News Source"
     }
 }
@@ -64,6 +61,7 @@ extension SourceNewsViewController: UICollectionViewDelegate, UICollectionViewDa
 extension SourceNewsViewController: SourceNewsViewControllerProtocol {
 
     func present(viewController: UIViewController) {
+        present(viewController, animated: true, completion: nil)
     }
 
     func success() {

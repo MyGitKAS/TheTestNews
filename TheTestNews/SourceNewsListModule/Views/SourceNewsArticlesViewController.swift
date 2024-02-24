@@ -49,7 +49,7 @@ extension SourceNewsArticlesViewController: UICollectionViewDelegate, UICollecti
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! SourceNewsArticlesCollectionViewCell
         guard let news = presenter.newsCollection else { return cell }
-        let oneNews = news.articles[indexPath.row]
+        let article = news.articles[indexPath.row]
         
         presenter.getImage(index: indexPath.row) { image in
             guard let image = image else { return }
@@ -57,9 +57,9 @@ extension SourceNewsArticlesViewController: UICollectionViewDelegate, UICollecti
                 cell.imageView.image = image
             }
         }
-        cell.titleLabel.text = oneNews.title
-        cell.sourceLabel.text = oneNews.source.name
-        cell.dateLabel.text = oneNews.publishedAt
+        cell.titleLabel.text = article.title
+        cell.sourceLabel.text = article.source.name
+        cell.dateLabel.text = article.formattedDate()
         return cell
     }
     
@@ -71,7 +71,7 @@ extension SourceNewsArticlesViewController: UICollectionViewDelegate, UICollecti
 extension SourceNewsArticlesViewController: GeneralNewsViewProtocol {
 
     func present(viewController: UIViewController) {
-        self.navigationController?.pushViewController(viewController, animated: true)
+        present(viewController, animated: true, completion: nil)
     }
 
     func success() {

@@ -9,10 +9,10 @@ import UIKit
 
 protocol FullScreenArticleViewControllerProtocol: AnyObject {
     func setData()
-    func present(viewController: UIViewController)
+    func presentWebView(viewController: UIViewController)
 }
 
-class FullScreenArticleViewController: UIViewController , FullScreenArticleViewControllerProtocol {
+class FullScreenArticleViewController: UIViewController {
 
     var presenter: FullScreenArticlePresenterProtocol!
     
@@ -31,6 +31,8 @@ class FullScreenArticleViewController: UIViewController , FullScreenArticleViewC
     private var horisontalStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
+        stack.alignment = .center
+        stack.distribution = .equalSpacing
         return stack
     }()
     
@@ -41,10 +43,11 @@ class FullScreenArticleViewController: UIViewController , FullScreenArticleViewC
         return label
     }()
     
-    private var sourceLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: TextSize.medium.getSize() , weight: .light)
-        return label
+    private var sourceButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: TextSize.medium.getSize(), weight: .light)
+        button.addTarget(self, action: #selector(sourceButtonTapped), for: .touchUpInside)
+        return button
     }()
     
     private var dateLabel: UILabel = {
@@ -93,7 +96,7 @@ class FullScreenArticleViewController: UIViewController , FullScreenArticleViewC
         view.addSubview(scrollView)
         scrollView.addSubview(verticalStack)
         verticalStack.addArrangedSubview(titleLabel)
-        horisontalStack.addArrangedSubview(sourceLabel)
+        horisontalStack.addArrangedSubview(sourceButton)
         horisontalStack.addArrangedSubview(dateLabel)
         verticalStack.addArrangedSubview(horisontalStack)
         verticalStack.addArrangedSubview(imageView)
@@ -101,13 +104,28 @@ class FullScreenArticleViewController: UIViewController , FullScreenArticleViewC
         verticalStack.addArrangedSubview(goSiteButton)
     }
     
+    @objc func goSiteButtonTapped(_ button: UIButton) {
+        presenter.goSiteButtonTapped()
+    }
+    
+    @objc func sourceButtonTapped() {
+        presenter.sourceButtonTapped()
+    }
+}
+
+extension FullScreenArticleViewController: FullScreenArticleViewControllerProtocol {
+    
+    func presentWebView(viewController: UIViewController) {
+        present(viewController, animated: true, completion: nil)
+    }
+    
     func setData() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.titleLabel.text = self.presenter.article?.title
-            self.sourceLabel.text = self.presenter.article?.source.name
+            self.sourceButton.setTitle(self.presenter.article?.source.name, for: .normal)
             self.textLabel.text = self.presenter.article?.description
-            self.dateLabel.text = self.presenter.article?.publishedAt
+            self.dateLabel.text = self.presenter.article?.formattedDate()
             self.presenter.getImage() { image in
                 guard let image = image else { return }
                 DispatchQueue.main.async {
@@ -115,14 +133,6 @@ class FullScreenArticleViewController: UIViewController , FullScreenArticleViewC
                 }
             }
         }
-    }
-    
-    func present(viewController: UIViewController) {
-        present(viewController, animated: true, completion: nil)
-    }
-    
-    @objc func goSiteButtonTapped(_ button: UIButton) {
-        presenter.goSiteButtonTapped()
     }
 }
 

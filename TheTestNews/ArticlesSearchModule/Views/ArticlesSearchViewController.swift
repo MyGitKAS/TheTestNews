@@ -105,14 +105,14 @@ class ArticlesSearchViewController: UIViewController {
 }
 
 extension ArticlesSearchViewController: ArticlesSearchViewControllerProtocol {
+    func present(viewController: UIViewController) {
+        present(viewController, animated: true, completion: nil)
+    }
+    
     func success() {
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }
-    }
-    
-    func present(viewController: UIViewController) {
-        present(viewController, animated: true, completion: nil)
     }
 }
 
@@ -124,16 +124,16 @@ extension ArticlesSearchViewController: UICollectionViewDelegate, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ArticlesSearchCollectionViewCell
         guard let news = presenter.newsCollection else { return cell }
-        let oneNews = news.articles[indexPath.row]
+        let article = news.articles[indexPath.row]
         presenter.getImage(index: indexPath.row) { image in
             guard let image = image else { return }
             DispatchQueue.main.async {
                 cell.imageView.image = image
             }
         }
-        cell.titleLabel.text = oneNews.title
-        cell.leftLabel.text = oneNews.source.name
-        cell.rightLabel.text = oneNews.publishedAt
+        cell.titleLabel.text = article.title
+        cell.leftLabel.text = article.source.name
+        cell.rightLabel.text = article.formattedDate()
         cell.buttonTapAction = { [weak self] in self?.presenter.itemIsPressed(index: indexPath.row)}
         cell.layer.shadowColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         cell.layer.shadowOffset = CGSize(width: 0, height: 0)

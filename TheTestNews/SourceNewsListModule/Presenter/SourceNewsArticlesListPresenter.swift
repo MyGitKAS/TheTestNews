@@ -64,7 +64,8 @@ class SourceNewsArticlesListPresenter: SourceNewsArticlesListPresenterProtocol {
     }
     
     func itemIsPressed(index: Int) {
-        //
+        guard let article = newsCollection?.articles[index] else { return }
+        router.showFullscreenNews(article: article)
     }
 }
 

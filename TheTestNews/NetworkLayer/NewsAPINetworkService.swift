@@ -82,6 +82,7 @@ final class NewsAPINetworkService : NewsAPINetworkServiceProtocol {
             
             do {
                 let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601 
                 let fetchedData = try decoder.decode(T.self, from: data)
                 completion(fetchedData)
             } catch {
@@ -89,7 +90,7 @@ final class NewsAPINetworkService : NewsAPINetworkServiceProtocol {
                 completion(nil)
             }
         }
-       task.resume()
+        task.resume()
     }
 }
 

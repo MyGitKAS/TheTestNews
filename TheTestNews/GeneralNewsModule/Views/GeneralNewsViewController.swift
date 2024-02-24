@@ -8,7 +8,7 @@ import UIKit
 
 protocol GeneralNewsViewProtocol: ViewControllerProtocol {}
 
-class GeneralNewsViewController: UIViewController, UINavigationControllerDelegate {
+class GeneralNewsViewController: UIViewController {
 
     var presenter: GeneralNewsPresenterProtocol!
     
@@ -47,7 +47,6 @@ class GeneralNewsViewController: UIViewController, UINavigationControllerDelegat
         collectionView.addSubview(activityIndicator)
         activityIndicator.center = view.center
         activityIndicator.startAnimating()
-        navigationController?.delegate = self
         self.navigationItem.title = "Main Stream News"
         self.navigationController?.navigationBar.prefersLargeTitles = true
     }
@@ -61,7 +60,7 @@ extension GeneralNewsViewController: UICollectionViewDelegate, UICollectionViewD
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! GeneralCollectionViewCell
         guard let news = presenter.newsCollection else { return cell }
-        let oneNews = news.articles[indexPath.row]
+        let article = news.articles[indexPath.row]
         
         presenter.getImage(index: indexPath.row) { image in
             guard let image = image else { return }
@@ -69,9 +68,9 @@ extension GeneralNewsViewController: UICollectionViewDelegate, UICollectionViewD
                 cell.imageView.image = image
             }
         }
-        cell.titleLabel.text = oneNews.title
-        cell.sourceLabel.text = oneNews.source.name
-        cell.dateLabel.text = oneNews.publishedAt
+        cell.titleLabel.text = article.title
+        cell.sourceLabel.text = article.source.name
+        cell.dateLabel.text = article.formattedDate()
         return cell
     }
     
@@ -82,7 +81,7 @@ extension GeneralNewsViewController: UICollectionViewDelegate, UICollectionViewD
 
 extension GeneralNewsViewController: GeneralNewsViewProtocol {
     func present(viewController: UIViewController) {
-        //
+        present(viewController, animated: true, completion: nil)
     }
     
     func success() {

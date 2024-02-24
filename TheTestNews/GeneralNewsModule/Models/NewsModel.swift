@@ -21,8 +21,19 @@ struct Article: Codable {
     let title, description: String?
     let url: String?
     let urlToImage: String?
-    let publishedAt: String?
+    let publishedAt: Date?
     let content: String?
+
+    func formattedDate() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMM yy HH:mm"
+        
+        if let date = publishedAt {
+            return dateFormatter.string(from: date)
+        } else {
+            return "Unknow date"
+        }
+    }
 }
 
 // MARK: - Source
