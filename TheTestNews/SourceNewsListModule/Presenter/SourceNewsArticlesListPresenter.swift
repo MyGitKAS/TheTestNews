@@ -10,7 +10,6 @@ import UIKit
 
 protocol SourceNewsArticlesListPresenterProtocol: PresenterProtocol {
     var source: String { get }
-    func getImage(index: Int, completion: @escaping (UIImage?) -> Void)
     init(view: ViewControllerProtocol, networkService: NewsAPINetworkServiceProtocol, router: RouterProtocol, source: String)
 }
 
@@ -65,7 +64,7 @@ class SourceNewsArticlesListPresenter: SourceNewsArticlesListPresenterProtocol {
         }
         networkService.downloadImageWith(urlString: url) { image in
             guard let image = image else { return }
-           let compressImage =  Helper.compress(image: image)
+           let compressImage =  Helper.resizeImage(image, to: CGSize(width: 130, height: 100))
             completion(compressImage)
         }
     }

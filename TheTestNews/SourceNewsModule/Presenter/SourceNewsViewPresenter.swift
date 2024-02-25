@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 protocol SourceNewsViewPresenterProtocol: PresenterProtocol {
@@ -57,6 +58,18 @@ class SourceNewsViewPresenter: SourceNewsViewPresenterProtocol{
                         self?.view.present(viewController: alertController)
                 }
             }
+        }
+    }
+    
+    func getImage(index: Int, completion: @escaping (UIImage?) -> Void) {
+        guard let url = newsCollection?.articles[index].source.url else {
+            completion(UIImage(named: "test_image"))
+            return
+        }
+        networkService.downloadImageWith(urlString: url) { image in
+            guard let image = image else { return }
+            let compressImage =  Helper.resizeImage(image, to: CGSize(width: 80, height: 80))
+            completion(compressImage)
         }
     }
     

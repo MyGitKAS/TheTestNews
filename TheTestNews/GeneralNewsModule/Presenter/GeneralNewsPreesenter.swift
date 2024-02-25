@@ -10,7 +10,6 @@ import UIKit
 
 protocol GeneralNewsPresenterProtocol: PresenterProtocol {
     func reloadNews()
-    func getImage(index: Int, completion: @escaping (UIImage?) -> Void) 
 }
 
 class GeneralNewsPresenter: GeneralNewsPresenterProtocol {
@@ -37,7 +36,7 @@ class GeneralNewsPresenter: GeneralNewsPresenterProtocol {
         
         networkService.downloadImageWith(urlString: url) { image in
             if let image = image {
-                let compressImage = Helper.compress(image: image)
+                let compressImage = Helper.resizeImage(image, to: CGSize(width: 130, height: 100))
                 completion(compressImage)
             } else {
                 completion(nil)

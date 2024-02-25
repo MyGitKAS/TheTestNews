@@ -11,7 +11,6 @@ import UIKit
 protocol ArticlesSearchViewPresenterProtocol: PresenterProtocol {
     func getSearchNews(text: String)
     func getCategoryNews(category: Category)
-    func getImage(index: Int, completion: @escaping (UIImage?) -> Void)
 }
 
 class ArticlesSearchViewPresenter: ArticlesSearchViewPresenterProtocol {
@@ -72,7 +71,7 @@ class ArticlesSearchViewPresenter: ArticlesSearchViewPresenterProtocol {
         }
         networkService.downloadImageWith(urlString: url) { image in
             guard let image = image else { return }
-            let compressImage =  Helper.compress(image: image)
+            let compressImage =  Helper.resizeImage(image, to: CGSize(width: 300, height: 200))
             completion(compressImage)
         }
     }

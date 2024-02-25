@@ -10,6 +10,7 @@ import UIKit
 protocol PresenterProtocol: AnyObject {
     var newsCollection: NewsModel? { get set }
     func getData(endpoint: Endpoint)
+    func getImage(index: Int, completion: @escaping (UIImage?) -> Void)
     func itemIsPressed(index: Int)
     init(view: ViewControllerProtocol, networkService: NewsAPINetworkServiceProtocol, router: RouterProtocol)
 }
