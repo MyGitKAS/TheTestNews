@@ -97,6 +97,18 @@ class ArticlesSearchViewController: UIViewController {
             titleLabel.isHidden = true
             searchBar.isHidden = true
             bottomSegmentedControl.isHidden = false
+            if bottomSegmentedControl.selectedSegmentIndex == -1 {
+                DispatchQueue.main.async { [weak self] in
+                    self?.presenter.newsCollection = nil
+                    self?.collectionView.reloadData()
+                }
+            } else {
+                let category = Constants.categoryNews[bottomSegmentedControl.selectedSegmentIndex]
+                DispatchQueue.main.async { [weak self] in
+                    self?.presenter.getCategoryNews(category: category)
+                    self?.collectionView.reloadData()
+                }
+            }
         default:
             break
         }
