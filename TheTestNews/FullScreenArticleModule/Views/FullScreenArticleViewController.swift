@@ -103,6 +103,7 @@ class FullScreenArticleViewController: UIViewController {
         verticalStack.addArrangedSubview(imageView)
         verticalStack.addArrangedSubview(textLabel)
         verticalStack.addArrangedSubview(goSiteButton)
+        navigationController?.navigationBar.tintColor = Constants.mainColor
     }
     
     @objc func goSiteButtonTapped(_ button: UIButton) {

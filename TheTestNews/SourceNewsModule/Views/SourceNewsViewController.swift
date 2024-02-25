@@ -48,6 +48,8 @@ extension SourceNewsViewController: UICollectionViewDelegate, UICollectionViewDa
         guard let sources = presenter?.sourceCollection else { return cell }
         let source = sources.sources[indexPath.row]
         cell.titleLabel.text = source.name
+        
+        cell.sourceNameLabel.text = String((source.name ?? "-").prefix(1))
         cell.sourceLabel.text = source.description
         cell.imageView.image = UIImage(named: "test_image")
         return cell

@@ -90,6 +90,8 @@ class ArticlesSearchViewController: UIViewController {
             searchBar.isHidden = false
             bottomSegmentedControl.isHidden = true
             presenter.newsCollection = nil
+            searchBar.endEditing(true)
+            searchBar.text = ""
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
             }

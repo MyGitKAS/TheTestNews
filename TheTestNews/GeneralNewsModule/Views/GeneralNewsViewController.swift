@@ -48,6 +48,7 @@ class GeneralNewsViewController: UIViewController {
         activityIndicator.center = view.center
         activityIndicator.startAnimating()
         self.navigationItem.title = "Main Stream News"
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
         self.navigationController?.navigationBar.prefersLargeTitles = true
     }
 }

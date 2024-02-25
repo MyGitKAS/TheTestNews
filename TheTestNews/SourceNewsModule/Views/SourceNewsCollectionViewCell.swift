@@ -46,6 +46,14 @@ class SourceNewsCollectionViewCell: UICollectionViewCell {
         imageView.image = UIImage(named:"test_image")
         return imageView
     }()
+    
+    let sourceNameLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 1
+        label.textColor = UIColor.white
+        label.font = UIFont.systemFont(ofSize: TextSize.extraLarge.getSize() , weight: .light)
+        return label
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -71,7 +79,14 @@ class SourceNewsCollectionViewCell: UICollectionViewCell {
         stackView.addArrangedSubview(verticalStackView)
         verticalStackView.addArrangedSubview(titleLabel)
         verticalStackView.addArrangedSubview(sourceLabel)
+        imageView.addSubview(sourceNameLabel)
         addSubview(stackView)
+        sourceNameLabel.translatesAutoresizingMaskIntoConstraints = false
+       
+        NSLayoutConstraint.activate([
+        sourceNameLabel.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
+        sourceNameLabel.centerYAnchor.constraint(equalTo: imageView.centerYAnchor)
+       ])
     }
 }
 
